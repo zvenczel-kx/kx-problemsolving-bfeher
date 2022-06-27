@@ -1,23 +1,23 @@
-# KX Problem solving exercise
+# KX Problem solving exercise Balint Feher
 
-## Problem
-We would like you to implement a distributed **Service Assembly** with a gateway component.
+## What is this?
+This is a distributed HTTP service written in Python, has a loadbalancer and multiple worker nodes. With HTTP GET queries to the following paths a JSON will be served:
+1) **/data** Picks a random backend server and serves stored data
+2) **/status** Checks all the backend servers and returns the statuses of those
+3) If no backend servers are available it returns a HTTP 503
+4) If you ask for a non existing path, it returns a HTTP 404
 
-## Description
-The service assembly will have the following components:
-1) **Storage Service** - stores in-memory, dummy data that can be accessed through a REST GET call in JSON format
-2) **Gateway Service** - main process that serves data to clients and tracks the availability of the Storage Services (there could be 0 to 3 available) and has the following REST endpoints
-    * **/status** - returns the status of each Storage Service
-    * **/data** - fetches the dummy data from a Storage Service (eg. with round robin) and returns the data in JSON format
+### How to run, ninja way
+Via docker compose and docker hub you can easily run the environment
+1) **docker compose pull** - Downloads the prebuilt x86 containers
+2) **docker compose up -d** - It creates the network and instaces from the previously downloaded docker images
+3) **docker compose down** - Stops the services and cleans up
 
-We would like the services to be containerised and run with docker-compose.
-The services can be implemented using any programming language.
+### How to run, build your own images
+If you want you can build your own containers, both app has a Dockerfile just use the following method:
+** docker build -t <your tag> .**
+*In this case don't forget to set your tags in docker-compose.yaml before deployment!
 
-## Architecture
-<img src="https://user-images.githubusercontent.com/90027208/152865747-5c4734dd-c046-4170-ae04-f0ea1448cf89.png" width="300">
-
-## Acceptance criteria
-* Please fork this git repository and work inside your own
-* Provide a solution for the described problem and give us the instructions necessary to execute it
-* We would like to have your solution in form of a Pull Request into the main repository
-* _What should the Gateway do if no Storage Services are running?_
+### Docker compose hints
+You can control the worker instance names via environment variables in docker-compose, if you wish even the quantity can be set too, just create new sections for app.
+Backend node pool can be set via environment variables, just create a list and use space as a delimiter  
