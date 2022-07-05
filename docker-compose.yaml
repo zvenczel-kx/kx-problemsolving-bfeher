@@ -1,0 +1,23 @@
+version: '3'
+services:
+  stg1:
+    image: fbalint23/app
+    environment:
+      - APP=stg1
+
+  stg2:
+    image: fbalint23/app
+    environment:
+      - APP=stg2
+
+  stg3:
+    image: fbalint23/app
+    environment:
+      - APP=stg3
+
+  gateway:
+    image: fbalint23/gateway:latest
+    environment:
+      - CONFIG=stg1:5000 stg2:5000 stg3:5000
+    ports:
+      - "8080:5000"
